@@ -1,4 +1,4 @@
-# Prisoner's Dilemma
+# Particle Swarm Optimization for the Prisoner's Dilemma
 
 ## How the data was collected
 
@@ -26,3 +26,23 @@ The data was collected in a CSV file, which can be found in the data folder. The
 - **average_weekly_commits**: The mean number of commits per week, indicating the typical activity level.
 
 - **commit_consistency**: A measure of how evenly distributed commits are over time. Lower values indicate more consistent contribution patterns, while higher values suggest more sporadic development with bursts of activity.
+
+## Ethical Analysis
+
+## How Particle Swarm Optimization Might Be Misused
+
+The algorithm could be misused in several ways, such as:
+
+- **Manipulate contributor behavior**: Organizations could optimize engagement metrics while minimizing actual resource allocation, creating a facade of community while extracting maximum value from contributors.
+
+- **Corporate competitive advantage**: Large companies could strategically identify optimal non-contribution strategies that appear cooperative but actually minimize their resource commitment to open-source projects they profit from.
+
+## Algorithmic Bias
+
+Although unbiased in its core design, particle swarm optimization can introduce bias through the fitness function used to evaluate contributions. Those potential sources of bias include:
+
+- **Concentration bias**: With a high contribution Gini coefficient, there's significant inequality in participation. If the algorithm optimizes strategies for this concentration, it would favor a small group of contributors, while the median contributor has far fewer contributions.
+
+- **Activity rhythm bias**: Based on the commit consistency metrics, the algorithm might favor contributors who match existing project rhythms, potentially neglecting important contributions from those with a non-traditional work schedule.
+
+- **Scale bias**: In a repository with hundreds of unique contributors but a small number of weekly commits, the algorithm can undervalue small but critical contributions from the majority of participants who contribute below the mean rate.
