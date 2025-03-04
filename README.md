@@ -1,6 +1,14 @@
-# Particle Swarm Optimization for the Prisoner's Dilemma
+# Particle Swarm Optimization (PSO) for the Prisoner's Dilemma
 
-## How the data was collected
+Authors: [Enricco Gemha](https://github.com/G3mha), Joseph Vazhaeparampil
+
+## Background of Algorithm
+
+## Walkthrough
+
+## Solving a Problem
+
+### How Data Was Collected
 
 All the data was collected through the GitHub API. The data was collected in two steps. The first step was to collect the top 1000 repositories on GitHub for contributors, chosen by their number of stars received. The second step was to collect the data for each of the top 1000 repositories.
 
@@ -19,7 +27,7 @@ The data was collected in a CSV file, which can be found in the data folder. The
   - 1: Perfect inequality (one person makes all contributions)
   - Values around 0.8 suggest a heavy concentration of work among a small core group
 
-## Activity Metrics
+### Activity Metrics
 
 - **total_annual_commits**: The total number of commits made to the repository over the past year.
 
@@ -29,7 +37,7 @@ The data was collected in a CSV file, which can be found in the data folder. The
 
 ## Ethical Analysis
 
-## How Particle Swarm Optimization Might Be Misused
+### How Particle Swarm Optimization Might Be Misused
 
 The algorithm could be misused in several ways, such as:
 
@@ -37,7 +45,7 @@ The algorithm could be misused in several ways, such as:
 
 - **Corporate competitive advantage**: Large companies could strategically identify optimal non-contribution strategies that appear cooperative but actually minimize their resource commitment to open-source projects they profit from.
 
-## Algorithmic Bias
+### Algorithmic Bias
 
 Although unbiased in its core design, particle swarm optimization can introduce bias through the fitness function used to evaluate contributions. Those potential sources of bias include:
 
@@ -47,7 +55,7 @@ Although unbiased in its core design, particle swarm optimization can introduce 
 
 - **Scale bias**: In a repository with hundreds of unique contributors but a small number of weekly commits, the algorithm can undervalue small but critical contributions from the majority of participants who contribute below the mean rate.
 
-## Mitigation Strategies
+### Mitigation Strategies
 
 These ethical concerns can be addressed through:
 
@@ -57,7 +65,7 @@ These ethical concerns can be addressed through:
 
 - **Regular algorithmic audits**: Periodically check if the algorithmic outcomes are fitting with the reality of the project, and its potential unusual workflow.
 
-## Case Studies
+### Case Studies
 
 1. **Linux Kernel Development**: The Linux Foundation's 2024 report showed that over 4,300 developers from 500 companies contributed to the kernel, with unpaid developers contributing to only 8.2% of the development. This is situation where the algorithm can concentrate development influence on corporate players, that if not carefully balanced, can hinder individual contributions.
 
