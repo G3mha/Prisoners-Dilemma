@@ -37,7 +37,7 @@ def sphere_fitness_function(x, center, weights):
 
 ### How Data Was Collected
 
-All the data was collected through the GitHub API. The data was collected in two steps. The first step was to collect the top 1000 repositories on GitHub for contributors, chosen by their number of stars received. The second step was to collect the data for each of the top 1000 repositories.
+All the data was collected through the GitHub API. The data was collected in two steps. The first step was to collect the top 20 repositories on GitHub for contributors, chosen by their number of stars received. The second step was to collect the data for each of the top 20 repositories.
 
 The data was collected in a CSV file, which can be found in the data folder. The attributes collected for each repository can be found in [Contribution Metrics](#contribution-metrics) and [Activity Metrics](#activity-metrics).
 
@@ -64,7 +64,29 @@ The data was collected in a CSV file, which can be found in the data folder. The
 
 ### Normalizing Data and Scaling
 
-The data was normalized using the Min-Max scaling method, which scales all the 7 metrics to a fixed range of 0 to 1.
+The data was normalized using the Min-Max scaling method, which scales all the 7 metrics to a fixed range of 0 to 1. The arbitrary range was chosen to make the data comparable and easier to work with in the PSO algorithm.
+
+```python
+min_values = [
+  1,      # unique_contributors_count: Min 1 contributor
+  1,      # median_contributions_per_contributor: Min 1 contribution 
+  1,      # mean_contributions_per_contributor: Min 1 contribution
+  0,      # contribution_gini_coefficient: 0 = perfect equality
+  1,      # total_annual_commits: Min 1 commit per year
+  0.02,   # average_weekly_commits: ~1 commit per year
+  0,      # commit_consistency: 0 = perfectly consistent
+]
+
+max_values = [
+  5000,   # unique_contributors_count: Accommodate larger projects
+  500,    # median_contributions_per_contributor: Higher ceiling
+  1000,   # mean_contributions_per_contributor: Higher ceiling for skewed distributions
+  1,      # contribution_gini_coefficient: 1 = perfect inequality
+  50000,  # total_annual_commits: ~1000 commits per week
+  1000,   # average_weekly_commits: Higher ceiling
+  10,     # commit_consistency: Higher ceiling for more variable projects
+]
+```
 
 It was also necessary to define a ideal center point and weights for the Sphere fitness function. Those values were arbitrarily defined based on the already normalized data:
 
