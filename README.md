@@ -8,14 +8,30 @@ Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](htt
 
 ### Choosing the Fitness Function
 
-Based on the (3) paper, we chose the following fitness function for the PSO algorithm:
+In the (3) paper, we can see a comparison of the runtime of the PSO algorithm using different fitness functions. The functions compared were:
+
+![Runtime Fitness Function](./img/runtime_fitness_functions.png)
+_Extracted from the paper (3)_
+
+Therefore, for its better runtime, we chose the Sphere as the fitness function for our PSO algorithm. For a multi-dimensional problem with n parameters, the Sphere function is defined as:
+
+$$f(\vec{x}) = \sqrt{\sum_{i=1}^{n} w_i(x_i - c_i)^2}$$
+
+Where:
+  
+- $\vec{x} = (x_1, x_2, ..., x_n)$ is the vector of normalized parameters
+- $\vec{c} = (c_1, c_2, ..., c_n)$ is the center point (ideal solution)
+- $\vec{w} = (w_1, w_2, ..., w_n)$ is the vector of weights for each dimension
+
+In Python, the function can be implemented as:
 
 ```python
-def fitness_function(x):
-    return x[0]**2 + x[1]**2
+def sphere_fitness_function(x, center, weights):
+  """
+  Generalized Sphere fitness function for n dimensions.
+  """
+  return np.sqrt(sum(weights[i] * (x[i] - center[i])**2 for i in range(len(x))))
 ```
-
-
 
 ## Solving a Problem
 
@@ -45,6 +61,36 @@ The data was collected in a CSV file, which can be found in the data folder. The
 - **average_weekly_commits**: The mean number of commits per week, indicating the typical activity level.
 
 - **commit_consistency**: A measure of how evenly distributed commits are over time. Lower values indicate more consistent contribution patterns, while higher values suggest more sporadic development with bursts of activity.
+
+### Normalizing Data and Scaling
+
+The data was normalized using the Min-Max scaling method, which scales all the 7 metrics to a fixed range of 0 to 1.
+
+It was also necessary to define a ideal center point and weights for the Sphere fitness function. Those values were arbitrarily defined based on the already normalized data:
+
+```python
+ideal_center = [
+  0.75,  # unique_contributors_count: High but not maximum (broad participation)
+  0.65,  # median_contributions_per_contributor: Moderately high (sustained engagement)
+  0.55,  # mean_contributions_per_contributor: Moderate (balanced contributions)
+  0.25,  # contribution_gini_coefficient: Low (equal distribution of work)
+  0.65,  # total_annual_commits: Moderately high (active development)
+  0.55,  # average_weekly_commits: Moderate (consistent activity)
+  0.35   # commit_consistency: Low to moderate (regular rather than sporadic)
+]
+
+weights = [
+  1.5,  # unique_contributors_count: Higher weight (broad participation)
+  1.0,  # median_contributions_per_contributor: Standard weight
+  1.0,  # mean_contributions_per_contributor: Standard weight
+  2.0,  # contribution_gini_coefficient: Highest weight (equality of contributions)
+  1.0,  # total_annual_commits: Standard weight
+  1.0,  # average_weekly_commits: Standard weight
+  1.3   # commit_consistency: Higher weight (consistency of cooperation)
+]
+```
+
+It is important to note that the weights were arbitrarily defined and could be adjusted based on the specific context of the problem, and are a potential improvement to be made in a future iteration, as discussed in the [Ethical Analysis](#ethical-analysis).
 
 ## Ethical Analysis
 
