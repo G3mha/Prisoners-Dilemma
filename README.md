@@ -1,10 +1,21 @@
 # Particle Swarm Optimization (PSO) for the Prisoner's Dilemma
 
-Authors: [Enricco Gemha](https://github.com/G3mha), Joseph Vazhaeparampil
+Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
 ## Background of Algorithm
 
 ## Walkthrough
+
+### Choosing the Fitness Function
+
+Based on the (3) paper, we chose the following fitness function for the PSO algorithm:
+
+```python
+def fitness_function(x):
+    return x[0]**2 + x[1]**2
+```
+
+
 
 ## Solving a Problem
 
@@ -55,6 +66,8 @@ Although unbiased in its core design, particle swarm optimization can introduce 
 
 - **Scale bias**: In a repository with hundreds of unique contributors but a small number of weekly commits, the algorithm can undervalue small but critical contributions from the majority of participants who contribute below the mean rate.
 
+- **Fitness function bias**: The fitness function used to evaluate the contribution parameters can introduce bias if the weights between each features are not properly balanced, or key features are not accounted for. For example, the function can only considers code commits, neglecting other essential contributions like documentation or community support. Another example is the function being too heavily weighted towards the number of commits, incentivizing quantity-over-quality contributions.
+
 ### Mitigation Strategies
 
 These ethical concerns can be addressed through:
@@ -73,6 +86,8 @@ These ethical concerns can be addressed through:
 
 ## Sources
 
-- [Linux Foundation Report 2024 Analysis](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
+1. [Linux Foundation Report 2024 Analysis](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
 
-- [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
+2. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
+
+3. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
