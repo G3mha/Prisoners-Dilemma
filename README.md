@@ -75,14 +75,7 @@ The data was collected in a CSV file, which can be found in the data folder. The
 
 - **mean_contributions_per_contributor**: The average number of contributions per contributor.
 
-- **contribution_gini_coefficient**: A measure of inequality in contributions, where:
-  - 0: Perfect equality (everyone contributes equally)
-  - 1: Perfect inequality (one person makes all contributions)
-  - Values around 0.8 suggest a heavy concentration of work among a small core group
-
 ### Activity Metrics
-
-- **total_annual_commits**: The total number of commits made to the repository over the past year.
 
 - **average_weekly_commits**: The mean number of commits per week, indicating the typical activity level.
 
@@ -102,7 +95,7 @@ The algorithm could be misused in several ways, such as:
 
 Although unbiased in its core design, particle swarm optimization can introduce bias through the fitness function used to evaluate contributions. Those potential sources of bias include:
 
-- **Concentration bias**: With a high contribution Gini coefficient, there's significant inequality in participation. If the algorithm optimizes strategies for this concentration, it would favor a small group of contributors, while the median contributor has far fewer contributions.
+- **Concentration bias**: With a high contribution by few contributors, there's significant inequality in participation. If the algorithm optimizes strategies for this concentration, it would favor a small group of contributors, while the median contributor has far fewer contributions.
 
 - **Activity rhythm bias**: Based on the commit consistency metrics, the algorithm might favor contributors who match existing project rhythms, potentially neglecting important contributions from those with a non-traditional work schedule.
 
