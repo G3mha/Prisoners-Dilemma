@@ -26,7 +26,12 @@ Particle Swarm Optimization is a metaheuristic, population-based optimization al
      - Maximum number of iterations reached.
      - Improvement in the global best fitness is below a threshold.
   9) Return g as the best approximation to the optimal solution.
-      
+
+Here is a visualization of the progression of particle swarm optimization on a Rastrigin function, a non-convex function with many local maxima often used as a performance test for optimization problems. Here is a visualization of the Rastrigin function. For x_i ∈ [−5.12, 5.12], Rastrigin has a global maxima around
+{\displaystyle x_{i}\in [\pm 4.52299366...,...,\pm 4.52299366...]}. 
+![image](https://github.com/user-attachments/assets/c5db9883-fc09-4557-8d04-e1f8e6143caa)
+Our particle swarm implementation over 100 timesteps found a global maxima at {\displaystyle x_{i}\in [\pm 4.19189874,\pm 4.31836399]}
+
 ### Choosing the Fitness Function
 
 In the (3) paper, we can see a comparison of the runtime of the PSO algorithm using different fitness functions. The functions compared were:
