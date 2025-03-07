@@ -5,7 +5,28 @@ Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](htt
 ## Background of Algorithm
 Particle Swarm Optimization is a metaheuristic, population-based optimization algorithm that is also classified as a swarm intelligence technique. It was originally developed by James Kennedy and Russel Eberhart to simulate social behaviour of a flock of birds looking for food. However, they soon realized its applicability to optimization problems and would later refine it with Yuhui Shi to create a technique for solving optimization problems. Because it does not rely on gradient descent, it can be applied to a wide variety of problems, including those that have non-differentiable reward functions. As a result, it has since been widely adopted in a large variety of spaces including engineering, artificial intelligence and finance. 
 ## Walkthrough
-
+1) Initialize the Swarm:
+   - Define the number of particles 𝑁
+   - Randomly initialize each particle’s position 𝑥_𝑖, y_𝑖, z_𝑖 . . . (depending on the dimensionality of the solution space).
+   - Randomly initialize each particle’s velocity 𝑣_𝑖
+ 2) Set parameters such as inertia weight 𝑤, cognitive coefficient 𝑐_1, and social coefficient 𝑐_2.
+ 3) Evaluate the Fitness for each particle based on the objective function:
+ 4) Identify the best position each particle has achieved so far
+ 5) Identify the best position any partivle has achieved so far
+ 6) Update Velocity and Position:
+    𝑣_𝑖+1 = 𝑤𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)
+    𝑥_𝑖+1 = 𝑥_𝑖 + 𝑥_𝑖𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)
+    - w is the inertia weight
+    - c_1 & c_2 are acceleration coefficients
+    - r_1 & r_2 are random numbers between 0 & 1
+    - p_i is the personal best position
+    - g is the global best position 
+  7) Apply constraints to make sure the particle stays within the solution space
+  8) Repeat steps 2–5 until a stopping criterion is met:
+     - Maximum number of iterations reached.
+     - Improvement in the global best fitness is below a threshold.
+  9) Return g as the best approximation to the optimal solution.
+      
 ### Choosing the Fitness Function
 
 In the (3) paper, we can see a comparison of the runtime of the PSO algorithm using different fitness functions. The functions compared were:
