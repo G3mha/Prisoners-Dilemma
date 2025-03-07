@@ -159,3 +159,7 @@ These ethical concerns can be addressed through:
 2. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
 
 3. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
+
+4. [Particle Swarm Optimization] (https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
+   
+5. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments] (https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
