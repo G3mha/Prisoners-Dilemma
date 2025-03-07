@@ -3,7 +3,7 @@
 Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
 ## Background of Algorithm
-
+Particle Swarm Optimization is a metaheuristic, population-based optimization algorithm that is also classified as a swarm intelligence technique. It was originally developed by James Kennedy and Russel Eberhart to simulate social behaviour of a flock of birds looking for food. However, they soon realized its applicability to optimization problems and would later refine it with Yuhui Shi to create a technique for solving optimization problems. Because it does not rely on gradient descent, it can be applied to a wide variety of problems, including those that have non-differentiable reward functions. As a result, it has since been widely adopted in a large variety of spaces including engineering, artificial intelligence and finance. 
 ## Walkthrough
 
 ### Choosing the Fitness Function
