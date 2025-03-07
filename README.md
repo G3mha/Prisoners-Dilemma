@@ -14,8 +14,8 @@ Particle Swarm Optimization is a metaheuristic, population-based optimization al
  4) Identify the best position each particle has achieved so far
  5) Identify the best position any partivle has achieved so far
  6) Update Velocity and Position:<br/>
-    $$f(𝑣_{𝑖+1}) = 𝑤𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)$$ <br/>
-    $$f(𝑥_{𝑖+1}) = 𝑥_𝑖 + 𝑥_𝑖𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)$$
+    $$𝑣_{𝑖+1} = 𝑤𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)$$ <br/>
+    $$𝑥_{𝑖+1} = 𝑥_𝑖 + 𝑥_𝑖𝑣_𝑖 + 𝑐_1𝑟_1(𝑝_𝑖−𝑥_𝑖)+𝑐_2𝑟_2(𝑔−𝑥_𝑖)$$
     - w is the inertia weight
     - c_1 & c_2 are acceleration coefficients
     - r_1 & r_2 are random numbers between 0 & 1
