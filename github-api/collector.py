@@ -2,12 +2,10 @@ import requests
 import json
 import time
 import csv
-from datetime import datetime, timedelta
-from collections import defaultdict
-import statistics
-import math
+from datetime import datetime
 import os
 import argparse
+import re
 
 def fetch_top_repos(page=1, per_page=100):
     """Fetch top repositories sorted by stars from GitHub API"""
@@ -20,13 +18,11 @@ def fetch_top_repos(page=1, per_page=100):
         "per_page": per_page
     }
     
-    # GitHub requires a User-Agent header
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "GitHub-Top-Repos-Collector"
+        "User-Agent": "GitHub-Repo-Metrics-Collector"
     }
     
-    # Add personal token if provided via command line
     if 'GITHUB_TOKEN' in globals() and GITHUB_TOKEN:
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
     
@@ -35,163 +31,224 @@ def fetch_top_repos(page=1, per_page=100):
     if response.status_code == 200:
         return response.json()
     elif response.status_code == 403 and 'rate limit exceeded' in response.text:
-        # Handle rate limiting
         reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
         current_time = int(time.time())
-        sleep_time = reset_time - current_time + 5  # Add 5 seconds buffer
+        sleep_time = reset_time - current_time + 5
         
         print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds.")
         time.sleep(sleep_time)
-        return fetch_top_repos(page, per_page)  # Retry after sleeping
+        return fetch_top_repos(page, per_page)
     else:
         print(f"Error: {response.status_code}")
         print(response.text)
         return None
 
-def fetch_contributors(repo_full_name, headers):
-    """Fetch contributor statistics for a repository"""
-    url = f"https://api.github.com/repos/{repo_full_name}/contributors"
-    params = {"per_page": 100}
-    
-    contributors = []
-    page = 1
-    
-    while True:
-        params["page"] = page
-        response = requests.get(url, params=params, headers=headers)
-        
-        if response.status_code == 200:
-            page_contributors = response.json()
-            if not page_contributors:
-                break
-            contributors.extend(page_contributors)
-            page += 1
-            
-            # Check if we've reached the last page
-            if len(page_contributors) < 100:
-                break
-                
-            # Respect rate limits
-            time.sleep(0.5)
-        elif response.status_code == 403 and 'rate limit exceeded' in response.text:
-            handle_rate_limit(response)
-        else:
-            print(f"Error fetching contributors for {repo_full_name}: {response.status_code}")
-            break
-    
-    return contributors
-
-def fetch_commit_frequency(repo_full_name, headers):
-    """Fetch commit statistics for a repository over the past year"""
-    url = f"https://api.github.com/repos/{repo_full_name}/stats/commit_activity"
-    
-    response = requests.get(url, headers=headers)
-    
-    if response.status_code == 200:
-        return response.json()
-    elif response.status_code == 202:
-        # GitHub is computing the statistics, retry after a short delay
-        print(f"GitHub is computing stats for {repo_full_name}, waiting...")
-        time.sleep(5)
-        return fetch_commit_frequency(repo_full_name, headers)
-    elif response.status_code == 403 and 'rate limit exceeded' in response.text:
-        handle_rate_limit(response)
-        return fetch_commit_frequency(repo_full_name, headers)
-    else:
-        print(f"Error fetching commit frequency for {repo_full_name}: {response.status_code}")
-        return []
-
 def handle_rate_limit(response):
     """Handle GitHub API rate limiting"""
     reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
     current_time = int(time.time())
-    sleep_time = reset_time - current_time + 5  # Add 5 seconds buffer
+    sleep_time = reset_time - current_time + 5
     
     print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds.")
     time.sleep(sleep_time)
 
-def calculate_contribution_metrics(repo_full_name, headers):
-    """Calculate only essential contribution metrics to stay within API rate limits"""
-    metrics = {}
-    
-    # 1. Number of unique contributors
-    contributors = fetch_contributors(repo_full_name, headers)
-    metrics["unique_contributors_count"] = len(contributors)
-    
-    # Calculate distribution of contributions
-    if contributors:
-        contribution_counts = [c.get("contributions", 0) for c in contributors]
-        metrics["median_contributions_per_contributor"] = statistics.median(contribution_counts) if contribution_counts else 0
-        metrics["mean_contributions_per_contributor"] = statistics.mean(contribution_counts) if contribution_counts else 0
-        
-        # Calculate Gini coefficient for contribution inequality
-        sorted_contributions = sorted(contribution_counts)
-        cumsum = [0]
-        for i, x in enumerate(sorted_contributions):
-            cumsum.append(cumsum[i] + x)
-        n = len(sorted_contributions)
-        if n > 0 and cumsum[-1] > 0:
-            metrics["contribution_gini_coefficient"] = (2 * sum(i * y for i, y in enumerate(sorted_contributions, 1)) / 
-                                               (n * cumsum[-1])) - (n + 1) / n
-        else:
-            metrics["contribution_gini_coefficient"] = 0
-    
-    # 2. Commit frequency
-    commit_stats = fetch_commit_frequency(repo_full_name, headers)
-    if commit_stats:
-        weekly_commits = [week.get("total", 0) for week in commit_stats]
-        metrics["total_annual_commits"] = sum(weekly_commits)
-        metrics["average_weekly_commits"] = statistics.mean(weekly_commits) if weekly_commits else 0
-        metrics["commit_consistency"] = statistics.stdev(weekly_commits) / max(metrics["average_weekly_commits"], 1) if weekly_commits and len(weekly_commits) > 1 else 0
-    
-    return metrics
-
-def collect_enhanced_repo_data(repo, headers):
-    """Collect enhanced repository data including contribution metrics"""
-    repo_full_name = repo["full_name"]
-    print(f"Collecting enhanced data for {repo_full_name}...")
-    
-    # Get basic repo data
-    basic_data = extract_repo_data(repo)
-    
-    # Get advanced contribution metrics
+def get_last_page_number(response):
+    """Extract the last page number from the Link header"""
     try:
-        contribution_metrics = calculate_contribution_metrics(repo_full_name, headers)
-        return {**basic_data, **contribution_metrics}
+        if 'Link' in response.headers and 'rel="last"' in response.headers['Link']:
+            # Debug: Print the full Link header
+            print(f"DEBUG - Link Header: {response.headers['Link']}")
+            
+            link_header = response.headers['Link']
+            link_parts = link_header.split(',')
+            
+            for part in link_parts:
+                if 'rel="last"' in part:
+                    url_part = part.split(';')[0].strip('<>')
+                    print(f"DEBUG - Last URL: {url_part}")
+                    
+                    # Use regex to find the page parameter
+                    match = re.search(r'[&?]page=(\d+)', url_part)
+                    if match:
+                        page_num = int(match.group(1))
+                        print(f"DEBUG - Extracted page number: {page_num}")
+                        return page_num
+            
+            # If we couldn't find it with regex
+            print("DEBUG - Couldn't extract page number with regex, trying direct methods")
+            if "page=" in link_header:
+                parts = link_header.split("page=")
+                for part in parts[1:]:  # Skip the first part before "page="
+                    num_str = ""
+                    for char in part:
+                        if char.isdigit():
+                            num_str += char
+                        elif num_str:  # Stop at the first non-digit after finding digits
+                            break
+                    if num_str:
+                        page_num = int(num_str)
+                        print(f"DEBUG - Extracted page number (fallback): {page_num}")
+                        return page_num
+        
+        # If we get here, there's no pagination or we couldn't extract the page number
+        print("DEBUG - No pagination found or couldn't extract page number")
+        return 1
     except Exception as e:
-        print(f"Error collecting enhanced data for {repo_full_name}: {str(e)}")
-        return basic_data
+        print(f"DEBUG - Error extracting page number: {str(e)}")
+        return 1
 
-def extract_repo_data(repo):
-    """Extract relevant data from a repository object"""
-    return {
+def fetch_commit_count(repo_full_name, headers):
+    """Fetch total commit count for a repository"""
+    url = f"https://api.github.com/repos/{repo_full_name}/commits"
+    params = {"per_page": 1}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        last_page = get_last_page_number(response)
+        # GitHub API paginates with 30 items per page by default when per_page is not specified
+        # But we specified per_page=1, so each page has 1 commit
+        return last_page
+    elif response.status_code == 403 and 'rate limit exceeded' in response.text:
+        handle_rate_limit(response)
+        return fetch_commit_count(repo_full_name, headers)
+    else:
+        print(f"Error fetching commit count for {repo_full_name}: {response.status_code}")
+        return 0
+
+def fetch_contributors_count(repo_full_name, headers):
+    """Fetch contributor count for a repository"""
+    url = f"https://api.github.com/repos/{repo_full_name}/contributors"
+    params = {"per_page": 1}  # Removed anon=1 which was causing parsing issues
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        last_page = get_last_page_number(response)
+        return last_page
+    elif response.status_code == 403 and 'rate limit exceeded' in response.text:
+        handle_rate_limit(response)
+        return fetch_contributors_count(repo_full_name, headers)
+    else:
+        print(f"Error fetching contributor count for {repo_full_name}: {response.status_code}")
+        return 0
+
+def fetch_pull_requests_counts(repo_full_name, headers):
+    """Fetch pull request counts (open, closed, merged) for a repository"""
+    counts = {
+        "open_pr": 0,
+        "closed_pr": 0,
+        "merged_pr": 0
+    }
+    
+    # Fetch open PRs
+    url = f"https://api.github.com/repos/{repo_full_name}/pulls"
+    params = {"state": "open", "per_page": 1}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        counts["open_pr"] = get_last_page_number(response)
+    elif response.status_code == 403 and 'rate limit exceeded' in response.text:
+        handle_rate_limit(response)
+        return fetch_pull_requests_counts(repo_full_name, headers)
+    
+    # Fetch closed PRs
+    url = f"https://api.github.com/repos/{repo_full_name}/pulls"
+    params = {"state": "closed", "per_page": 1}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        counts["closed_pr"] = get_last_page_number(response)
+    
+    # Merged PRs requires individual checking, use sample to estimate
+    # For large repos, get a reasonable estimation by sampling
+    url = f"https://api.github.com/repos/{repo_full_name}/pulls"
+    params = {"state": "closed", "per_page": 20}  # Sample 20 closed PRs
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        closed_prs = response.json()
+        merged_count = 0
+        for pr in closed_prs:
+            if pr.get('merged_at'):
+                merged_count += 1
+        
+        # Calculate the ratio of merged to closed from sample
+        if closed_prs:
+            merge_ratio = merged_count / len(closed_prs)
+            counts["merged_pr"] = int(counts["closed_pr"] * merge_ratio)
+        
+    return counts
+
+def fetch_issues_counts(repo_full_name, headers):
+    """Fetch issue counts (open, closed) for a repository"""
+    counts = {
+        "open_issue": 0,
+        "closed_issue": 0
+    }
+    
+    # Fetch open issues
+    url = f"https://api.github.com/repos/{repo_full_name}/issues"
+    params = {"state": "open", "per_page": 1}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        counts["open_issue"] = get_last_page_number(response)
+    elif response.status_code == 403 and 'rate limit exceeded' in response.text:
+        handle_rate_limit(response)
+        return fetch_issues_counts(repo_full_name, headers)
+    
+    # Fetch closed issues
+    url = f"https://api.github.com/repos/{repo_full_name}/issues"
+    params = {"state": "closed", "per_page": 1}
+    
+    response = requests.get(url, params=params, headers=headers)
+    
+    if response.status_code == 200:
+        counts["closed_issue"] = get_last_page_number(response)
+    
+    return counts
+
+def collect_repo_metrics(repo, headers):
+    """Collect specific repository metrics"""
+    repo_full_name = repo["full_name"]
+    print(f"Collecting metrics for {repo_full_name}...")
+    
+    # Extract basic repo data
+    basic_data = {
         "name": repo["name"],
         "full_name": repo["full_name"],
         "owner": repo["owner"]["login"],
-        "owner_type": repo["owner"]["type"],
-        "html_url": repo["html_url"],
         "description": repo["description"],
-        "stars": repo["stargazers_count"],
-        "forks": repo["forks_count"],
-        "watchers": repo["watchers_count"],
         "language": repo["language"],
-        "open_issues": repo["open_issues_count"],
+        "stars": repo["stargazers_count"],
+        "fork": repo["forks_count"],
         "created_at": repo["created_at"],
-        "updated_at": repo["updated_at"],
-        "pushed_at": repo["pushed_at"],
-        "size": repo["size"],
-        "license": repo["license"]["name"] if repo["license"] else None,
-        "topics": repo.get("topics", []),
-        "default_branch": repo["default_branch"],
-        "has_wiki": repo["has_wiki"],
-        "has_pages": repo["has_pages"],
-        "archived": repo["archived"],
-        "disabled": repo["disabled"]
+        "updated_at": repo["updated_at"]
     }
+    
+    # Get commit count
+    basic_data["commits"] = fetch_commit_count(repo_full_name, headers)
+    
+    # Get contributor count
+    basic_data["contributors"] = fetch_contributors_count(repo_full_name, headers)
+    
+    # Get pull request counts
+    pr_counts = fetch_pull_requests_counts(repo_full_name, headers)
+    basic_data.update(pr_counts)
+    
+    # Get issue counts
+    issue_counts = fetch_issues_counts(repo_full_name, headers)
+    basic_data.update(issue_counts)
+    
+    return basic_data
 
-def save_to_json(data, filename='top_github_repos.json'):
+def save_to_json(data, filename='data/data.json'):
     """Save repositories data to JSON file"""
-    # Ensure directory exists
     directory = os.path.dirname(filename)
     if directory:
         os.makedirs(directory, exist_ok=True)
@@ -200,22 +257,17 @@ def save_to_json(data, filename='top_github_repos.json'):
         json.dump(data, f, ensure_ascii=False, indent=2)
     print(f"Data saved to {filename}")
 
-def save_to_csv(data, filename='top_github_repos.csv'):
+def save_to_csv(data, filename='data/data.csv'):
     """Save repositories data to CSV file"""
     if not data:
         print("No data to save")
         return
     
-    # Ensure directory exists
     directory = os.path.dirname(filename)
     if directory:
         os.makedirs(directory, exist_ok=True)
         
-    # Get all unique keys from all repositories
-    fieldnames = set()
-    for repo in data:
-        fieldnames.update(repo.keys())
-    fieldnames = sorted(list(fieldnames))
+    fieldnames = sorted(list(data[0].keys()))
     
     with open(filename, 'w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -223,172 +275,75 @@ def save_to_csv(data, filename='top_github_repos.csv'):
         writer.writerows(data)
     print(f"Data saved to {filename}")
 
-def save_checkpoint(processed_repos, current_index, total_repos, timestamp):
-    """Save a checkpoint of processed repositories"""
-    checkpoint_dir = "../db"
-    
-    # Ensure the directory exists
-    os.makedirs(checkpoint_dir, exist_ok=True)
-    
-    checkpoint_file = f"{checkpoint_dir}/github_checkpoint_{timestamp}.json"
-    
-    checkpoint_data = {
-        "timestamp": datetime.now().isoformat(),
-        "processed_count": len(processed_repos),
-        "current_index": current_index,
-        "total_repos": total_repos,
-        "repos": processed_repos
-    }
-    
-    with open(checkpoint_file, 'w', encoding='utf-8') as f:
-        json.dump(checkpoint_data, f, ensure_ascii=False, indent=2)
-    
-    print(f"Checkpoint saved: {len(processed_repos)}/{total_repos} repositories processed")
-    
-def load_checkpoint(timestamp=None):
-    """Load the most recent checkpoint or a specific checkpoint"""
-    checkpoint_dir = "../db"
-    
-    # Ensure the directory exists
-    os.makedirs(checkpoint_dir, exist_ok=True)
-    
-    # Get all checkpoint files
-    checkpoint_files = [f for f in os.listdir(checkpoint_dir) if f.startswith("github_checkpoint_") and f.endswith(".json")]
-    
-    if not checkpoint_files:
-        print("No checkpoints found")
-        return [], 0, 0, None
-    
-    # If timestamp is provided, try to find that specific checkpoint
-    if timestamp:
-        target_file = f"github_checkpoint_{timestamp}.json"
-        if target_file in checkpoint_files:
-            checkpoint_file = os.path.join(checkpoint_dir, target_file)
-        else:
-            print(f"Checkpoint for timestamp {timestamp} not found")
-            return [], 0, 0, None
-    else:
-        # Otherwise, get the most recent checkpoint
-        checkpoint_files.sort(reverse=True)
-        checkpoint_file = os.path.join(checkpoint_dir, checkpoint_files[0])
-        
-    try:
-        with open(checkpoint_file, 'r', encoding='utf-8') as f:
-            checkpoint_data = json.load(f)
-            
-        processed_repos = checkpoint_data.get("repos", [])
-        current_index = checkpoint_data.get("current_index", 0)
-        total_repos = checkpoint_data.get("total_repos", 0)
-        timestamp = checkpoint_file.split("_")[-1].split(".")[0]
-        
-        print(f"Checkpoint loaded: {len(processed_repos)}/{total_repos} repositories already processed")
-        return processed_repos, current_index, total_repos, timestamp
-    
-    except Exception as e:
-        print(f"Error loading checkpoint: {str(e)}")
-        return [], 0, 0, None
-
-def run_enhanced_collection(total_repos=20, resume_from_checkpoint=False):  # Reduced default to 20 due to API limits
-    """Main function to run the enhanced collection process with checkpoint support"""
+def collect_data(total_repos=20):
+    """Main function to collect repository metrics"""
     start_time = time.time()
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    # Try to load checkpoint if requested
-    processed_repos = []
-    current_index = 0
-    if resume_from_checkpoint:
-        processed_repos, current_index, saved_total, saved_timestamp = load_checkpoint()
-        if processed_repos and current_index < saved_total:
-            print(f"Resuming collection from checkpoint at index {current_index}")
-            timestamp = saved_timestamp or timestamp
-            
-            # If we're resuming, use the same total as before unless explicitly changed
-            if total_repos == 20:  # The default value
-                total_repos = saved_total
+    print(f"Starting collection of top {total_repos} GitHub repositories...")
     
-    print(f"Starting enhanced collection of top {total_repos} GitHub repositories...")
-    
-    # GitHub requires a User-Agent header
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "GitHub-Top-Repos-Collector"
+        "User-Agent": "GitHub-Repo-Metrics-Collector"
     }
     
-    # Add GitHub token if available
     if 'GITHUB_TOKEN' in globals() and GITHUB_TOKEN:
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
         print("Using GitHub token for authentication")
     else:
         print("WARNING: No GitHub token provided. API rate limits will be very restrictive.")
     
-    # Only fetch repositories if we need more
     all_repos = []
-    if len(processed_repos) < total_repos:
-        # Calculate how many more repos we need
-        remaining_repos = total_repos - len(processed_repos)
-        
-        per_page = 100  # Max allowed by GitHub API
-        total_pages = (remaining_repos + per_page - 1) // per_page  # Ceiling division
-        
-        for page in range(1, total_pages + 1):
-            print(f"Fetching page {page}/{total_pages}...")
-            
-            response_data = fetch_top_repos(page, per_page)
-            if not response_data:
-                break
-                
-            repos = response_data.get('items', [])
-            all_repos.extend(repos)
-            
-            # Check if we've reached the end of results
-            if len(repos) < per_page:
-                break
-                
-            # Respect GitHub API rate limits
-            time.sleep(2)
-        
-        # Ensure we don't exceed the requested count
-        all_repos = all_repos[:remaining_repos]
+    per_page = 100
+    total_pages = (total_repos + per_page - 1) // per_page
     
-    # Process each repository that hasn't been processed yet
-    for i, repo in enumerate(all_repos, start=current_index):
-        try:
-            print(f"Processing repository {i+1}/{total_repos}: {repo['full_name']}")
-            enhanced_data = collect_enhanced_repo_data(repo, headers)
-            processed_repos.append(enhanced_data)
+    for page in range(1, total_pages + 1):
+        print(f"Fetching page {page}/{total_pages}...")
+        
+        response_data = fetch_top_repos(page, per_page)
+        if not response_data:
+            break
             
-            # Save checkpoint after every 5 repositories or when we hit the end
-            if (i + 1) % 5 == 0 or i == len(all_repos) - 1:
-                save_checkpoint(processed_repos, i + 1, total_repos, timestamp)
+        repos = response_data.get('items', [])
+        all_repos.extend(repos)
+        
+        if len(repos) < per_page:
+            break
+            
+        time.sleep(2)
+    
+    all_repos = all_repos[:total_repos]
+    
+    # Process each repository
+    processed_repos = []
+    for i, repo in enumerate(all_repos):
+        try:
+            print(f"Processing repository {i+1}/{len(all_repos)}: {repo['full_name']}")
+            repo_metrics = collect_repo_metrics(repo, headers)
+            processed_repos.append(repo_metrics)
+            print(f"Successfully processed {repo['full_name']}")
             
             # Be extra cautious with rate limits between repositories
             time.sleep(2)
         except Exception as e:
             print(f"Error processing repository {repo['full_name']}: {str(e)}")
-            # Save checkpoint on error
-            save_checkpoint(processed_repos, i, total_repos, timestamp)
-            # Continue with next repository
             continue
     
-    # Save final data in multiple formats
-    save_to_json(processed_repos, f"../db/enhanced_github_repos_{timestamp}.json")
-    save_to_csv(processed_repos, f"../db/enhanced_github_repos_{timestamp}.csv")
+    # Save data in multiple formats
+    save_to_json(processed_repos)
+    save_to_csv(processed_repos)
     
     elapsed_time = time.time() - start_time
     print(f"Collection complete: {len(processed_repos)}/{total_repos} repositories collected in {elapsed_time:.2f} seconds.")
     return processed_repos
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Collect GitHub repository data with enhanced contribution metrics')
+    parser = argparse.ArgumentParser(description='Collect GitHub repository metrics for PSO analysis')
     parser.add_argument('--repos', type=int, default=20, help='Number of repositories to collect (default: 20)')
-    parser.add_argument('--resume', action='store_true', help='Resume from the most recent checkpoint')
     parser.add_argument('--token', type=str, help='GitHub personal access token')
     
     args = parser.parse_args()
     
-    # Add your personal token for higher rate limits (required for enhanced collection)
     if args.token:
         GITHUB_TOKEN = args.token
     
-    # Collect repositories
-    run_enhanced_collection(total_repos=args.repos, resume_from_checkpoint=args.resume)
+    collect_data(total_repos=args.repos)
