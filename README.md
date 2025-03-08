@@ -118,9 +118,16 @@ Here is a visualization of that implementation: [Rastrigin function in 2D space 
 
 ## Solving a Problem
 
-### About the Problem
+### Open Source Contribution as a Prisoner's Dilemma
 
+Open source development presents a classic prisoner's dilemma: while everyone benefits when contributors invest time and resources into projects, individual contributors face incentives to free-ride on others' work without contributing themselves. This creates a fundamental tension:
 
+1. **Collective benefit**: The community gains most when many participants contribute actively, and regularly to open source projects.
+2. **Individual incentive**: Contributors must balance personal investment (time and effort) against uncertain returns, which can lead to under-contribution.
+
+In organizations using open source software, they strategically decide how much to contribute versus how much to simply consume. Companies might recognize the benefit of contributing but still choose minimal engagement, so they can maximize their resources, leading to a potential "tragedy of the commons", in which very important projects become under-maintained.
+
+Particle Swarm Optimization helps address this dilemma by identifying an optimal contribution pattern. This can be later compared to the actual contribution patterns of famous open source projects, to identify the healthiest and most sustainable ones at the moment.
 
 ### Parameter Space and Optimization Bounds
 
