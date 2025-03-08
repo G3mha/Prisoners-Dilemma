@@ -2,6 +2,34 @@
 
 Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
+## Introduction
+
+This project implements Particle Swarm Optimization (PSO) to analyze open source contribution patterns as a solution to the prisoner's dilemma in open source development on GitHub repositories. By modeling how various metrics correlate with project health and sustainability, we identify the best repositories to invest time and effort in contributing to.
+
+## Table of Contents
+
+- [Libraries Used](#libraries-used)
+- [Resources Used](#resources-used)
+- [Installation and Setup](#installation-and-setup)
+- [Project Structure](#project-structure)
+- [Background of Algorithm](#background-of-algorithm)
+- [How the Algorithm Works](#how-the-algorithm-works)
+- [Solving a Problem](#solving-a-problem)
+  - [Open Source Contribution as a Prisoner's Dilemma](#open-source-contribution-as-a-prisoners-dilemma)
+  - [How PSO Can Help](#how-pso-can-help)
+  - [How Data was Collected](#how-data-was-collected)
+  - [Metrics](#metrics)
+    - [Contribution Metrics](#contribution-metrics)
+    - [Issue Management Metrics](#issue-management-metrics)
+    - [Community Engagement Metrics](#community-engagement-metrics)
+  - [Optimization Bounds](#optimization-bounds)
+  - [Reward Function Implementation](#reward-function-implementation)
+- [Ethical Analysis](#ethical-analysis)
+  - [How Particle Swarm Optimization Might Be Misused](#how-particle-swarm-optimization-might-be-misused)
+  - [Algorithmic Bias](#algorithmic-bias)
+  - [Mitigation Strategies](#mitigation-strategies)
+  - [Case Studies](#case-studies)
+
 ## Libraries Used
 
 - NumPy: For numerical operations and array handling
@@ -130,7 +158,6 @@ In organizations using open source software, they strategically decide how much 
 ### How PSO Can Help
 
 Particle Swarm Optimization helps solve this dilemma by identifying an optimal contribution pattern. The algorithm searches the parameter space of key metrics like commits, issues, and pull requests to find the equilibrium point where both communities and individual contributors benefit sustainably. By using real repository data, PSO reveals which contribution patterns lead to healthier projects over time, inherently advising those seeking to invest time and effort into contributing to a repository to avoid the aforementioned "tragedy of the commons".
-
 
 ### How Data was Collected
 
