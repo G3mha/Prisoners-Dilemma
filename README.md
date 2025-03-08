@@ -129,9 +129,9 @@ In organizations using open source software, they strategically decide how much 
 
 Particle Swarm Optimization helps address this dilemma by identifying an optimal contribution pattern. This can be later compared to the actual contribution patterns of famous open source projects, to identify the healthiest and most sustainable ones at the moment.
 
-### Parameter Space and Optimization Bounds
+### Optimization Bounds
 
-Our PSO algorithm searches through a bounded parameter space representing key GitHub repository metrics. These bounds were determined through analysis of our dataset to create a realistic optimization space:
+Our PSO algorithm searches through a bounded parameter space representing key GitHub repository metrics. These bounds were determined arbitrarily by manual observation of the range of values in top GitHub repositories, ensuring sufficient space to explore potential optimal configurations.
 
 | Metric | Minimum Value | Maximum Value |
 |--------|--------------|--------------|
