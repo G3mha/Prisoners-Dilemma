@@ -39,15 +39,23 @@ This project implements Particle Swarm Optimization (PSO) to analyze open source
 
 ## Resources Used
 
-1. [GitHub REST API Documentation](https://docs.github.com/en/rest)
-2. [Particle Swarm Optimization: Original Paper by Kennedy and Eberhart](https://ieeexplore.ieee.org/document/488968)
-3. [NumPy Documentation](https://numpy.org/doc/stable/)
-4. [Linux Foundation Report 2024](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
-5. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
-6. [Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)](https://doi.org/10.48550/arXiv.2006.07240)
-7. [Particle Swarm Optimization](https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
-8. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments](https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
-9. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
+[1] GitHub, "REST API Documentation," GitHub Docs. [Online]. Available: https://docs.github.com/en/rest. [Accessed: Mar. 8, 2025].
+
+[2] J. Kennedy and R. Eberhart, "Particle swarm optimization," in Proceedings of ICNN'95 - International Conference on Neural Networks, Perth, WA, Australia, 1995, pp. 1942-1948.
+
+[3] NumPy, "NumPy Documentation," NumPy.org. [Online]. Available: https://numpy.org/doc/stable/. [Accessed: Mar. 8, 2025].
+
+[4] The Linux Foundation, "The Linux Foundation Releases Annual Kernel Development Report," Datacentre Solutions, 2024. [Online]. Available: https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report. [Accessed: Mar. 8, 2025].
+
+[5] Mend, "How the Heartbleed Vulnerability Shaped OpenSSL," Mend.io, 2023. [Online]. Available: https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/. [Accessed: Mar. 8, 2025].
+
+[6] T. Xia, W. Fu, R. Shu, R. Agrawal, and T. Menzies, "Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)," arXiv:2006.07240, Jun. 2020.
+
+[7] M. Sahimi and P. Tahmasebi, "Reconstruction, optimization, and design of heterogeneous materials and media: Basic principles, computational algorithms, and applications," Physics Reports, vol. 939, pp. 1-82, 2021, doi: 10.1016/j.physrep.2021.09.003.
+
+[8] D. Freitas, L. G. Lopes, and F. Morgado-Dias, "Particle Swarm Optimisation: A Historical Review Up to the Current Developments," Entropy, vol. 22, no. 3, p. 362, Mar. 2020, doi: 10.3390/e22030362.
+
+[9] B. K. Abbas, Q. A. Z. Jabbar, and R. T. Hameed, "Optimizing Benchmark Functions using Particle Swarm Optimization PSO," Al-Salam Journal for Engineering and Technology, vol. 4, no. 1, pp. 192-198, 2025, doi: 10.55145/ajest.2025.04.01.019.
 
 ## Installation and Setup
 
