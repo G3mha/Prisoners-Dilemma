@@ -127,7 +127,10 @@ Open source development presents a classic prisoner's dilemma: while everyone be
 
 In organizations using open source software, they strategically decide how much to contribute versus how much to simply consume. Companies might recognize the benefit of contributing but still choose minimal engagement, so they can maximize their resources, leading to a potential "tragedy of the commons", in which very important projects become under-maintained.
 
-Particle Swarm Optimization helps address this dilemma by identifying an optimal contribution pattern. This can be later compared to the actual contribution patterns of famous open source projects, to identify the healthiest and most sustainable ones at the moment.
+### How PSO Can Help
+
+Particle Swarm Optimization helps solve this dilemma by identifying an optimal contribution pattern. The algorithm searches the parameter space of key metrics like commits, issues, and pull requests to find the equilibrium point where both communities and individual contributors benefit sustainably. By using real repository data, PSO reveals which contribution patterns lead to healthier projects over time, inherently advising those seeking to invest time and effort into contributing to a repository to avoid the aforementioned "tragedy of the commons".
+
 
 ### How Data was Collected
 
