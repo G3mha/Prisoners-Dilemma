@@ -2,6 +2,27 @@
 
 Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
+## Installation and Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/G3mha/particle-swarm-optimization-prisoners-dilemma.git
+   cd particle-swarm-optimization-prisoners-dilemma
+   ```
+
+2. Install required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the main script:
+
+   ```bash
+   python src/main.py
+   ```
+
 ## Libraries Used
 
 - NumPy: For numerical operations and array handling
