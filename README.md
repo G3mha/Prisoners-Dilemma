@@ -118,7 +118,29 @@ Here is a visualization of that implementation: [Rastrigin function in 2D space 
 
 ## Solving a Problem
 
-### How Data Was Collected
+### About the Problem
+
+
+
+### Parameter Space and Optimization Bounds
+
+Our PSO algorithm searches through a bounded parameter space representing key GitHub repository metrics. These bounds were determined through analysis of our dataset to create a realistic optimization space:
+
+| Metric | Minimum Value | Maximum Value |
+|--------|--------------|--------------|
+| Commits | 0 | 100,000 |
+| Contributors | 0 | 10,000 |
+| Open PRs | 0 | 100,000 |
+| Closed PRs | 0 | 100,000 |
+| Merged PRs | 0 | 100,000 |
+| Open Issues | 0 | 50,000 |
+| Closed Issues | 0 | 50,000 |
+| Stars | 0 | 500,000 |
+| Forks | 0 | 500,000 |
+
+These bounds reflect the actual range observed in top GitHub repositories, especially the most popular ones, while allowing the algorithm sufficient space to explore potential optimal configurations.
+
+### How Data was Collected
 
 All the data was collected through the GitHub API. The data was collected in two steps. The first step was to collect the top 20 repositories on GitHub for contributors, chosen by their number of stars received. The second step was to collect the data for each of the top 20 repositories.
 
