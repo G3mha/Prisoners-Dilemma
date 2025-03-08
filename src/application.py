@@ -19,7 +19,6 @@ def load_repo_data(file_path):
     print(f"Error: File '{file_path}' contains invalid JSON")
     return
 
-
 def get_min_max_metrics():
   """
   Get the minimum and maximum values of the given data.

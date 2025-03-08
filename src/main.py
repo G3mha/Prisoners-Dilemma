@@ -4,6 +4,7 @@ from application import load_repo_data, get_min_max_metrics, reward_function
 from algorithm import particle_swarm_optimization
 from helpers import normalize
 
+
 def compare_repos_to_optimal(repos, optimal_position, bounds):
     """Compare actual repositories to the optimal repository found by PSO"""
     metrics = ['commits', 'contributors', 'open_pr', 'closed_pr', 
@@ -37,7 +38,6 @@ def compare_repos_to_optimal(repos, optimal_position, bounds):
     
     return repo_scores
 
-
 def print_repo_details(repo, optimal_position, metrics):
     """Print detailed metrics for a repository compared to the optimal"""
     print(f"Repository: {repo['name']} ({repo['full_name']})")
@@ -49,7 +49,6 @@ def print_repo_details(repo, optimal_position, metrics):
         actual = repo['metrics'][metric]
         optimal = optimal_position[i]
         print(f"  {metric}: {actual} (optimal: {optimal:.2f})")
-
 
 def main():
     repo_data = load_repo_data("data/data.json")
