@@ -56,26 +56,19 @@ def get_last_page_number(response):
     """Extract the last page number from the Link header"""
     try:
         if 'Link' in response.headers and 'rel="last"' in response.headers['Link']:
-            # Debug: Print the full Link header
-            print(f"DEBUG - Link Header: {response.headers['Link']}")
-            
             link_header = response.headers['Link']
             link_parts = link_header.split(',')
             
             for part in link_parts:
                 if 'rel="last"' in part:
                     url_part = part.split(';')[0].strip('<>')
-                    print(f"DEBUG - Last URL: {url_part}")
                     
                     # Use regex to find the page parameter
                     match = re.search(r'[&?]page=(\d+)', url_part)
                     if match:
                         page_num = int(match.group(1))
-                        print(f"DEBUG - Extracted page number: {page_num}")
                         return page_num
             
-            # If we couldn't find it with regex
-            print("DEBUG - Couldn't extract page number with regex, trying direct methods")
             if "page=" in link_header:
                 parts = link_header.split("page=")
                 for part in parts[1:]:  # Skip the first part before "page="
@@ -87,14 +80,11 @@ def get_last_page_number(response):
                             break
                     if num_str:
                         page_num = int(num_str)
-                        print(f"DEBUG - Extracted page number (fallback): {page_num}")
                         return page_num
         
         # If we get here, there's no pagination or we couldn't extract the page number
-        print("DEBUG - No pagination found or couldn't extract page number")
         return 1
     except Exception as e:
-        print(f"DEBUG - Error extracting page number: {str(e)}")
         return 1
 
 def fetch_commit_count(repo_full_name, headers):
