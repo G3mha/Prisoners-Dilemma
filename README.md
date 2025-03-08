@@ -2,6 +2,25 @@
 
 Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
+## Libraries Used
+
+- NumPy: For numerical operations and array handling
+- Matplotlib: For visualization in earlier iterations (deprecated)
+- Requests: For GitHub API interactions
+- JSON: For data parsing and storage
+
+## Resources Used
+
+1. [GitHub REST API Documentation](https://docs.github.com/en/rest)
+2. [Particle Swarm Optimization: Original Paper by Kennedy and Eberhart](https://ieeexplore.ieee.org/document/488968)
+3. [NumPy Documentation](https://numpy.org/doc/stable/)
+4. [Linux Foundation Report 2024](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
+5. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
+6. [Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)](https://doi.org/10.48550/arXiv.2006.07240)
+7. [Particle Swarm Optimization](https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
+8. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments](https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
+9. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
+
 ## Installation and Setup
 
 1. Clone the repository:
@@ -23,24 +42,22 @@ Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](htt
    python src/main.py
    ```
 
-## Libraries Used
+## Project Structure
 
-- NumPy: For numerical operations and array handling
-- Matplotlib: For visualization in earlier iterations (deprecated)
-- Requests: For GitHub API interactions
-- JSON: For data parsing and storage
-
-## Resources Used
-
-1. [GitHub REST API Documentation](https://docs.github.com/en/rest)
-2. [Particle Swarm Optimization: Original Paper by Kennedy and Eberhart](https://ieeexplore.ieee.org/document/488968)
-3. [NumPy Documentation](https://numpy.org/doc/stable/)
-4. [Linux Foundation Report 2024](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
-5. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
-6. [Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)](https://doi.org/10.48550/arXiv.2006.07240)
-7. [Particle Swarm Optimization](https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
-8. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments](https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
-9. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
+- `src/`: Source code directory
+  - `algorithm.py`: Core PSO implementation
+  - `application.py`: Application logic for repository analysis
+  - `helpers.py`: Utility functions
+  - `main.py`: Entry point for running the analysis
+- `data/`: Contains repository data
+  - `data.json`: Structured repository metrics
+  - `data.csv`: CSV version of repository metrics
+- `requirements.txt`: Required Python dependencies
+- `deprecated/`: Earlier implementations and experiments
+  - `ParticleSwarm.py`: Initial PSO implementation
+  - `ParticleSwarm_RastriginAnimation.py`: Visualization of PSO on Rastrigin function
+- `github-api/`: Scripts for data collection
+  - `collector.py`: GitHub API interaction code
 
 ## Background of Algorithm
 
@@ -151,11 +168,15 @@ Although unbiased in its core design, particle swarm optimization can introduce 
 
 These ethical concerns can be addressed through:
 
-- **Transparent fitness functions**: Clearly document how the scores for contribution are calculated, allowing judged communities to audit and refine the metrics, as any other Open-Source project.
+- **Transparent reward function**: Clearly document how the scores for contribution are calculated, allowing judged communities to audit and refine the metrics, as any other Open-Source project.
 
-- **Optimization goals**: Incorporate in the future a multi-objective optimization, valuing different types of contributions (code, documentation, community support), and not just commits.
+- **Optimization goals**: Futurely, extend the data analysis to better consider the correlations between each feature (forks, commits, PRs, etc.) and the project's success, to ensure the algorithm is even closer to reality.
 
-- **Regular algorithmic audits**: Periodically check if the algorithmic outcomes are fitting with the reality of the project, and its potential unusual workflow.
+- **Regular algorithmic audits**: Periodically check if the algorithmic outcomes are fitting with the current state of the top projects, and their potential unusual workflow.
+
+- **Diverse data sources**: Include repositories from different domains, sizes, and governance models to reduce selection bias, larger repos does not always mean better.
+
+- **Context-aware metrics**: Implement qualitative metrics to account for project maturity, scope, and domain-specific contribution patterns.
 
 ### Case Studies
 
