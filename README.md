@@ -17,6 +17,9 @@ Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](htt
 4. [Linux Foundation Report 2024](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
 5. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
 6. [Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)](https://doi.org/10.48550/arXiv.2006.07240)
+7. [Particle Swarm Optimization](https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
+8. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments](https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
+9. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
 
 ## Background of Algorithm
 
@@ -135,18 +138,6 @@ These ethical concerns can be addressed through:
 
 ### Case Studies
 
-1. **Linux Kernel Development**: The Linux Foundation's 2024 report showed that over 4,300 developers from 500 companies contributed to the kernel, with unpaid developers contributing to only 8.2% of the development. This is situation where the algorithm can concentrate development influence on corporate players, that if not carefully balanced, can hinder individual contributions.
+1. **Linux Kernel Development**: The Linux Foundation's 2024 report showed that over 4,300 developers from 500 companies contributed to the kernel, with unpaid developers contributing to only 8.2% of the development (4). This is situation where the algorithm can concentrate development influence on corporate players, that if not carefully balanced, can hinder individual contributions.
 
-2. **OpenSSL Heartbleed Vulnerability**: Despite securing 66% of web servers, OpenSSL was maintained by two part-time employees prior to the critical Heartbleed bug in 2014. Annual donations pre-2014 never exceeded $1 million, and with minimal code contributions. It was only after the incident that the Linux Foundation's Core Infrastructure Initiative, addressed the systemic underfunding. It is a clear example of how algorithms focused solely on feature contributions, without contextual maintenance work or financing informating, can lead to catastrophes affecting billions of users.
-
-## Sources
-
-1. [Linux Foundation Report 2024 Analysis](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
-
-2. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
-
-3. [Optimizing Benchmark Functions using Particle Swarm Optimization PSO](https://journal.alsalam.edu.iq/index.php/ajest/article/view/494/175)
-
-4. [Particle Swarm Optimization](https://www.sciencedirect.com/topics/physics-and-astronomy/particle-swarm-optimization#:~:text=Particle%20swarm%20optimization%20(PSO)%20was,bird%20flock%20or%20fish%20school.)
-
-5. [Particle Swarm Optimisation: A Historical Review Up to the Current Developments](https://pmc.ncbi.nlm.nih.gov/articles/PMC7516836/)
+2. **OpenSSL Heartbleed Vulnerability**: Despite securing 66% of web servers, OpenSSL was maintained by two part-time employees prior to the critical Heartbleed bug in 2014. Annual donations pre-2014 never exceeded $1 million, and with minimal code contributions. It was only after the incident that the Linux Foundation's Core Infrastructure Initiative, addressed the systemic underfunding (5). It is a clear example of how algorithms focused solely on feature contributions, without contextual maintenance work or financing informating, can lead to catastrophes affecting billions of users.
