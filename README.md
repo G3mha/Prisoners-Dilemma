@@ -67,7 +67,7 @@ Because it does not rely on gradient descent, it can be applied to a wide variet
 
 However, particle swarm does come with its fair share of shortcomings. The swarm can often converge to local optimums rather than absolute ones due to its heuristic nature, particular if the parameters are not effectively tuned. For instance, a larger swarm size ($N$) provides a better global search but also increases the computational cost. Inertia weight ($w$) controls how much a particle retains its previous velocity, which is useful early in the search to promote exploration, but not nearly as helpful later in the search when trying to refine the solution. Then there are the cognitive and social learning factors, $c_1$ and $c_2$. The cognitive factor $c_1$ encourages individual exploration, while the $c_2$ factor encourages group convergence. Stopping criteria could also have a large impact on the effectiveness of the algorithm. If there are not enough timesteps, the particle swarm might not find the global optimum, but a local one. Additionally, in solution spaces with higher dimensionality, finding the optimum solution becomes more and more computationally expensive and time-intensive.
 
-## Walkthrough
+## How the Algorithm Works
 
 1. **Initialize the Swarm**:
    - Define the number of particles $N$
@@ -129,6 +129,38 @@ In organizations using open source software, they strategically decide how much 
 
 Particle Swarm Optimization helps address this dilemma by identifying an optimal contribution pattern. This can be later compared to the actual contribution patterns of famous open source projects, to identify the healthiest and most sustainable ones at the moment.
 
+### How Data was Collected
+
+The open source repository data was collected using the GitHub REST API. Our collection process targeted the top 20 repositories ranked by stars, providing a representative sample of popular projects.
+
+The data collection was executed in two phases. First, we queried the API to identify the top starred repositories. Second, for each repository, the API calls gathered metrics, which are described in the [Metrics](#metrics) section.
+
+To handle GitHub API rate limits, it is recommended to use a personal access token. This token can be generated in the GitHub settings and passed as an environment variable to the script.
+
+The raw data was stored in both JSON and CSV formats to allow for flexible visualization and analysis.
+
+### Metrics
+
+Based on the paper (6), which proposed metrics to evaluate the health of GitHub repositories, and later analysed the correlation between them and the median value. From that we divided the metrics on three categories: **Contribution Metrics**, **Issue Management Metrics**, and **Community Engagement Metrics**.
+
+#### Contribution Metrics
+
+- **Commits**: Total number of code changes merged into the repository. This metric indicates the overall development activity.
+- **Contributors**: Count of unique developers who have contributed to the codebase. A healthy project typically has a diverse contributor base.
+- **Open Pull Requests**: Current work in progress awaiting review. This shows ongoing development interest.
+- **Closed Pull Requests**: Completed code submissions that were not merged. This can indicate code quality standards.
+- **Merged Pull Requests**: Successfully integrated code contributions. This metric shows completed development work.
+
+#### Issue Management Metrics
+
+- **Open Issues**: Current problems, feature requests, and tasks awaiting resolution. This reflects both community engagement and maintenance backlog.
+- **Closed Issues**: Resolved problems and completed requests. This shows responsiveness to user feedback.
+
+#### Community Engagement Metrics
+
+- **Stars**: Users who have bookmarked the repository. This primarily indicates popularity and perceived value.
+- **Forks**: Copies of the repository created by users for their own purposes. This shows practical utility and adaptation.
+
 ### Optimization Bounds
 
 Our PSO algorithm searches through a bounded parameter space representing key GitHub repository metrics. These bounds were determined arbitrarily by manual observation of the range of values in top GitHub repositories, ensuring sufficient space to explore potential optimal configurations.
@@ -147,29 +179,25 @@ Our PSO algorithm searches through a bounded parameter space representing key Gi
 
 These bounds reflect the actual range observed in top GitHub repositories, especially the most popular ones, while allowing the algorithm sufficient space to explore potential optimal configurations.
 
-### How Data was Collected
-
-All the data was collected through the GitHub API. The data was collected in two steps. The first step was to collect the top 20 repositories on GitHub for contributors, chosen by their number of stars received. The second step was to collect the data for each of the top 20 repositories.
-
-The data was collected in a CSV file, which can be found in the data folder. The attributes collected for each repository can be found in [Contribution Metrics](#contribution-metrics) and [Activity Metrics](#activity-metrics).
-
-### Contribution Metrics
-
-- **unique_contributors_count**: The total number of different individuals who have contributed to the repository.
-
-- **median_contributions_per_contributor**: The median value in the distribution of contributions, indicating the typical contribution level.
-
-- **mean_contributions_per_contributor**: The average number of contributions per contributor.
-
-### Activity Metrics
-
-- **average_weekly_commits**: The mean number of commits per week, indicating the typical activity level.
-
-- **commit_consistency**: A measure of how evenly distributed commits are over time. Lower values indicate more consistent contribution patterns, while higher values suggest more sporadic development with bursts of activity.
-
 ### Reward Function Implementation
 
-For our implementation, we created a reward function that evaluates repository health based on weighted metrics including **commits**, **contributors**, **PRs**, **issues**, **stars**, and **forks**. Each metric is normalized and weighted according to its correlation with project success, with higher weights assigned to metrics like closed issues (0.19) and open PRs (0.17) that more strongly indicate active development and community engagement. These weight values are based on the paper (6).
+We created a reward function that evaluates repository health based on weighting the metrics described in the [Metrics](#metrics) section. Each metric is assigned a weight according to its correlation with project success, based on the conclusions made by the paper (6).
+
+```python
+correlation_with_mean = {
+  'commits': 0.11,
+  'contributors': 0.08,
+  'open_pr': 0.17,
+  'closed_pr': 0.06,
+  'merged_pr': 0.11,
+  'open_issue': 0.14,
+  'closed_issue': 0.19,
+  'stars': 0.08,
+  'fork': 0.10,
+}
+```
+
+Higher weights are assigned to metrics like closed issues (0.19) and open PRs (0.17), which can indicate a correlation with active development and community engagement. In this way, ongoing maintenance is prioritized over raw popularity indicators.
 
 ## Ethical Analysis
 
