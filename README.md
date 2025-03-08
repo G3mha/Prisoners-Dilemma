@@ -2,6 +2,22 @@
 
 Authors: [Enricco Gemha](https://github.com/G3mha), [Joseph Vazhaeparampill](https://github.com/Josephvazhae1)
 
+## Libraries Used
+
+- NumPy: For numerical operations and array handling
+- Matplotlib: For visualization in earlier iterations (deprecated)
+- Requests: For GitHub API interactions
+- JSON: For data parsing and storage
+
+## Resources Used
+
+1. [GitHub REST API Documentation](https://docs.github.com/en/rest)
+2. [Particle Swarm Optimization: Original Paper by Kennedy and Eberhart](https://ieeexplore.ieee.org/document/488968)
+3. [NumPy Documentation](https://numpy.org/doc/stable/)
+4. [Linux Foundation Report 2024](https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report)
+5. [OpenSSL Heartbleed Vulnerability](https://www.mend.io/blog/how-the-heartbleed-vulnerability-shaped-openssl/)
+6. [Predicting Health Indicators for Open Source Projects (using Hyperparameter Optimization)](https://doi.org/10.48550/arXiv.2006.07240)
+
 ## Background of Algorithm
 
 Particle Swarm Optimization is a metaheuristic, population-based optimization algorithm that is also classified as a swarm intelligence technique. It was originally developed by James Kennedy and Russel Eberhart to simulate social behaviour of a flock of birds looking for food. However, they soon realized its applicability to optimization problems and would later refine it with Yuhui Shi to create a technique for solving optimization problems.
@@ -80,6 +96,10 @@ The data was collected in a CSV file, which can be found in the data folder. The
 - **average_weekly_commits**: The mean number of commits per week, indicating the typical activity level.
 
 - **commit_consistency**: A measure of how evenly distributed commits are over time. Lower values indicate more consistent contribution patterns, while higher values suggest more sporadic development with bursts of activity.
+
+### Reward Function Implementation
+
+For our implementation, we created a reward function that evaluates repository health based on weighted metrics including **commits**, **contributors**, **PRs**, **issues**, **stars**, and **forks**. Each metric is normalized and weighted according to its correlation with project success, with higher weights assigned to metrics like closed issues (0.19) and open PRs (0.17) that more strongly indicate active development and community engagement. These weight values are based on the paper (6).
 
 ## Ethical Analysis
 
