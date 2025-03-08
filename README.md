@@ -43,7 +43,7 @@ This project implements Particle Swarm Optimization (PSO) to analyze open source
 
 [2] J. Kennedy and R. Eberhart, "Particle swarm optimization," in Proceedings of ICNN'95 - International Conference on Neural Networks, Perth, WA, Australia, 1995, pp. 1942-1948.
 
-[3] NumPy, "NumPy Documentation," NumPy.org. [Online]. Available: https://numpy.org/doc/stable/. [Accessed: Mar. 8, 2025].
+[3] X. Wang, S. Lv, and J. Quan, "The evolution of cooperation in the Prisoner's Dilemma and the Snowdrift game based on Particle Swarm Optimization," Physica A: Statistical Mechanics and its Applications, vol. 482, pp. 286-295, 2017, doi: 10.1016/j.physa.2017.04.080.
 
 [4] The Linux Foundation, "The Linux Foundation Releases Annual Kernel Development Report," Datacentre Solutions, 2024. [Online]. Available: https://datacentre.solutions/news/52774/the-linux-foundation-releases-annual-kernel-development-report. [Accessed: Mar. 8, 2025].
 
@@ -56,6 +56,8 @@ This project implements Particle Swarm Optimization (PSO) to analyze open source
 [8] D. Freitas, L. G. Lopes, and F. Morgado-Dias, "Particle Swarm Optimisation: A Historical Review Up to the Current Developments," Entropy, vol. 22, no. 3, p. 362, Mar. 2020, doi: 10.3390/e22030362.
 
 [9] B. K. Abbas, Q. A. Z. Jabbar, and R. T. Hameed, "Optimizing Benchmark Functions using Particle Swarm Optimization PSO," Al-Salam Journal for Engineering and Technology, vol. 4, no. 1, pp. 192-198, 2025, doi: 10.55145/ajest.2025.04.01.019.
+
+[10] G. Papazoglou and P. Biskas, "Review and Comparison of Genetic Algorithm and Particle Swarm Optimization in the Optimal Power Flow Problem," Energies, vol. 16, no. 3, p. 1152, 2023, doi: 10.3390/en16031152.
 
 ## Installation and Setup
 
@@ -97,9 +99,9 @@ This project implements Particle Swarm Optimization (PSO) to analyze open source
 
 ## Background of Algorithm
 
-Particle Swarm Optimization is a metaheuristic, population-based optimization algorithm that is also classified as a swarm intelligence technique. It was originally developed by James Kennedy and Russel Eberhart to simulate social behaviour of a flock of birds looking for food. However, they soon realized its applicability to optimization problems and would later refine it with Yuhui Shi to create a technique for solving optimization problems.
+Particle Swarm Optimization (PSO) is a metaheuristic, population-based optimization algorithm that is also classified as a swarm intelligence technique. It was originally developed by James Kennedy and Russel Eberhart [2] to simulate social behaviour of a flock of birds looking for food. However, they soon realized its applicability to optimization problems and would later refine it with Yuhui Shi to create a technique for solving optimization problems.
 
-Because it does not rely on gradient descent, it can be applied to a wide variety of problems, including those that have non-differentiable or non-continuous reward functions. It also has faster convergence compared to most genetic algorithms since it leverages direct communication between the particles instead of evolutionary selection and is relatively simple computationally only requiring position and velocity updates. Unlike simulated annealing, which follows only a single solution path, particle swarm optimization makes use of collective learning with data from each of its particles. For these reasons, it has since been widely adopted in a large variety of spaces including engineering, artificial intelligence and finance.
+Because it does not rely on gradient descent, it can be applied to a wide variety of problems, including those that have non-differentiable or non-continuous reward functions. It also has faster convergence compared to most Genetic Algorithms (GA) since it leverages direct communication between the particles instead of evolutionary selection and is relatively simple computationally only requiring position and velocity updates. Having less parameters to tune than the GA, the PSO is simpler to implement, as suggested by the paper [10]. Unlike simulated annealing, which follows only a single solution path, particle swarm optimization makes use of collective learning with data from each of its particles. For these reasons, it has since been widely adopted in a large variety of spaces including engineering, artificial intelligence and finance.
 
 However, particle swarm does come with its fair share of shortcomings. The swarm can often converge to local optimums rather than absolute ones due to its heuristic nature, particular if the parameters are not effectively tuned. For instance, a larger swarm size ($N$) provides a better global search but also increases the computational cost. Inertia weight ($w$) controls how much a particle retains its previous velocity, which is useful early in the search to promote exploration, but not nearly as helpful later in the search when trying to refine the solution. Then there are the cognitive and social learning factors, $c_1$ and $c_2$. The cognitive factor $c_1$ encourages individual exploration, while the $c_2$ factor encourages group convergence. Stopping criteria could also have a large impact on the effectiveness of the algorithm. If there are not enough timesteps, the particle swarm might not find the global optimum, but a local one. Additionally, in solution spaces with higher dimensionality, finding the optimum solution becomes more and more computationally expensive and time-intensive.
 
@@ -165,11 +167,11 @@ In organizations using open source software, they strategically decide how much 
 
 ### How PSO Can Help
 
-Particle Swarm Optimization helps solve this dilemma by identifying an optimal contribution pattern. The algorithm searches the parameter space of key metrics like commits, issues, and pull requests to find the equilibrium point where both communities and individual contributors benefit sustainably. By using real repository data, PSO reveals which contribution patterns lead to healthier projects over time, inherently advising those seeking to invest time and effort into contributing to a repository to avoid the aforementioned "tragedy of the commons".
+The paper [3] suggests that the Particle Swarm Optimization algorithm can be used to solve a Prisoner's Dilemma problem. From that, in the context of our problem, open source contribution, we identified that PSO can identify an optimal contribution pattern. The algorithm searches the parameter space of key metrics like commits, issues, and pull requests to find the equilibrium point where both communities and individual contributors benefit sustainably. By using real repository data, PSO reveals which contribution patterns lead to healthier projects over time, inherently advising those seeking to invest time and effort into contributing to a repository to avoid the aforementioned "tragedy of the commons".
 
 ### How Data was Collected
 
-The open source repository data was collected using the GitHub REST API. Our collection process targeted the top 20 repositories ranked by stars, providing a representative sample of popular projects.
+The open source repository data was collected using the GitHub REST API [1]. Our collection process targeted the top 20 repositories ranked by stars, providing a representative sample of popular projects.
 
 The data collection was executed in two phases. First, we queried the API to identify the top starred repositories. Second, for each repository, the API calls gathered metrics, which are described in the [Metrics](#metrics) section.
 
