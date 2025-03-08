@@ -179,7 +179,7 @@ The raw data was stored in both JSON and CSV formats to allow for flexible visua
 
 ### Metrics
 
-Based on the paper (6), which proposed metrics to evaluate the health of GitHub repositories, and later analysed the correlation between them and the median value. From that we divided the metrics on three categories: **Contribution Metrics**, **Issue Management Metrics**, and **Community Engagement Metrics**.
+Based on the paper [6], which proposed metrics to evaluate the health of GitHub repositories, and later analysed the correlation between them and the median value. From that we divided the metrics on three categories: **Contribution Metrics**, **Issue Management Metrics**, and **Community Engagement Metrics**.
 
 #### Contribution Metrics
 
@@ -219,7 +219,7 @@ These bounds reflect the actual range observed in top GitHub repositories, espec
 
 ### Reward Function Implementation
 
-We created a reward function that evaluates repository health based on weighting the metrics described in the [Metrics](#metrics) section. Each metric is assigned a weight according to its correlation with project success, based on the conclusions made by the paper (6).
+We created a reward function that evaluates repository health based on weighting the metrics described in the [Metrics](#metrics) section. Each metric is assigned a weight according to its correlation with project success, based on the conclusions made by the paper [6].
 
 ```python
 correlation_with_mean = {
@@ -238,6 +238,12 @@ correlation_with_mean = {
 Higher weights are assigned to metrics like closed issues (0.19) and open PRs (0.17), which can indicate a correlation with active development and community engagement. In this way, ongoing maintenance is prioritized over raw popularity indicators.
 
 ## Ethical Analysis
+
+### Case Studies
+
+1. **Linux Kernel Development**: The Linux Foundation's 2024 report showed that over 4,300 developers from 500 companies contributed to the kernel, with unpaid developers contributing to only 8.2% of the development [4]. This is situation where the algorithm can concentrate development influence on corporate players, that if not carefully balanced, can hinder individual contributions.
+
+2. **OpenSSL Heartbleed Vulnerability**: Despite securing 66% of web servers, OpenSSL was maintained by two part-time employees prior to the critical Heartbleed bug in 2014. Annual donations pre-2014 never exceeded $1 million, and with minimal code contributions. It was only after the incident that the Linux Foundation's Core Infrastructure Initiative, addressed the systemic underfunding [5]. It is a clear example of how algorithms focused solely on feature contributions, without contextual maintenance work or financing informating, can lead to catastrophes affecting billions of users.
 
 ### How Particle Swarm Optimization Might Be Misused
 
@@ -272,9 +278,3 @@ These ethical concerns can be addressed through:
 - **Diverse data sources**: Include repositories from different domains, sizes, and governance models to reduce selection bias, larger repos does not always mean better.
 
 - **Context-aware metrics**: Implement qualitative metrics to account for project maturity, scope, and domain-specific contribution patterns.
-
-### Case Studies
-
-1. **Linux Kernel Development**: The Linux Foundation's 2024 report showed that over 4,300 developers from 500 companies contributed to the kernel, with unpaid developers contributing to only 8.2% of the development (4). This is situation where the algorithm can concentrate development influence on corporate players, that if not carefully balanced, can hinder individual contributions.
-
-2. **OpenSSL Heartbleed Vulnerability**: Despite securing 66% of web servers, OpenSSL was maintained by two part-time employees prior to the critical Heartbleed bug in 2014. Annual donations pre-2014 never exceeded $1 million, and with minimal code contributions. It was only after the incident that the Linux Foundation's Core Infrastructure Initiative, addressed the systemic underfunding (5). It is a clear example of how algorithms focused solely on feature contributions, without contextual maintenance work or financing informating, can lead to catastrophes affecting billions of users.
