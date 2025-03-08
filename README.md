@@ -59,6 +59,8 @@ This project implements Particle Swarm Optimization (PSO) to analyze open source
 
 [10] G. Papazoglou and P. Biskas, "Review and Comparison of Genetic Algorithm and Particle Swarm Optimization in the Optimal Power Flow Problem," Energies, vol. 16, no. 3, p. 1152, 2023, doi: 10.3390/en16031152.
 
+[11] M. A. K. Azrag and T. A. A. Kadir, "Empirical Study of Segment Particle Swarm Optimization and Particle Swarm Optimization Algorithms," International Journal of Advanced Computer Science and Applications, vol. 10, no. 8, pp. 480-485, 2019, doi: 10.14569/IJACSA.2019.0100863.
+
 ## Installation and Setup
 
 1. Clone the repository:
@@ -107,6 +109,8 @@ However, particle swarm does come with its fair share of shortcomings. The swarm
 
 ## How the Algorithm Works
 
+The steps of the Particle Swarm Optimization algorithm are as follows, based on the paper [8]:
+
 1. **Initialize the Swarm**:
    - Define the number of particles $N$
    - Randomly initialize each particle's position $x_i$, $y_i$, $z_i$ ... (depending on the dimensionality of the solution space)
@@ -144,7 +148,7 @@ However, particle swarm does come with its fair share of shortcomings. The swarm
 
 9. **Return Result**: The global best position g as the best approximation to the optimal solution
 
-Here is a visualization of PSO optimizing a Rastrigin function (a non-convex function with many local maxima often used as a performance test for optimization algorithms):
+Based on the concept proposed by the paper [11], here is a visualization of PSO optimizing a Rastrigin function (a non-convex function with many local maxima often used as a performance test for optimization algorithms):
 
 ![image](https://github.com/user-attachments/assets/c5db9883-fc09-4557-8d04-e1f8e6143caa)
 
